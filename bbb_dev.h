@@ -13,8 +13,8 @@
 
 //#include file with the Morse Code equivalences
 
-#define  DEVICE_NAME "BBBled"    
-#define  CLASS_NAME  "BBBdev" 
+#define  DEVICE_NAME "BBB_dev"    
+#define  CLASS_NAME  "BBB" 
 
 MODULE_LICENSE("GPL");            
 MODULE_AUTHOR("Ivette Prieto Castro");    
