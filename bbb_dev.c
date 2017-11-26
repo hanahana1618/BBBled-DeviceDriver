@@ -5,11 +5,11 @@
  */
  
 #include "bbb_dev.h"
+#include "McodeMod.h"
 
 static struct file_operations fops = {
    .owner = THIS_MODULE,
    .open = dev_open,
-   .read = dev_read,
    .write = dev_write,
    .release = dev_release
 };
@@ -63,17 +63,19 @@ static int dev_open(struct inode *inodep, struct file *filep){
 }
  
  //re-implement this whole function so that it sends the info to the LEDs, not the user
-static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
-   printk(KERN_INFO "String from user received");
+//static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
+//   printk(KERN_INFO "String from user received");
    
 
    //return -EFAULT;
-}
+//}
 
 //read from the user
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
    sprintf(message, "%s(%zu letters)", buffer, len);   
    sizeMssg = strlen(message);  
+
+   //add code here to send the message to the B^3 to be displayed using the LEDs
 
    //debugging for the write function             
    printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
