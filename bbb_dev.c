@@ -1,7 +1,7 @@
 //CHANGES TO IMPLEMENT
  /*
  * file bbb_dev.c
- * Sample LKM for Embedded OS at FIU
+ * LKM that retrieves a string from the user and flashes it in Morse code on the LEDs at the B^3 for Embedded OS at FIU
  */
  
 #include "bbb_dev.h"
@@ -10,6 +10,7 @@ static struct file_operations fops = {
    .owner = THIS_MODULE,
    .open = dev_open,
    .read = dev_read,
+   .write = dev_write,
    .release = dev_release
 };
  
@@ -68,6 +69,17 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
    //return -EFAULT;
 }
+
+//read from the user
+static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
+   sprintf(message, "%s(%zu letters)", buffer, len);   
+   sizeMssg = strlen(message);  
+
+   //debugging for the write function             
+   printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
+   return len;
+}
+
  
  //Add here code to release the LEDs after flashing is done
 static int dev_release(struct inode *inodep, struct file *filep) {
