@@ -92,14 +92,11 @@ static int dev_open(struct inode *inodep, struct file *filep){
 
 //read from the user and WRITE to the beaglebone at the same time
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
-   
+
    sprintf(message, "%s(%zu letters)", buffer, len);   
    sizeMssg = strlen(message);  
 
    //add code here to send the message to the B^3 to be displayed using the LEDs
-   //while(buffer!='\0') {
-   //   char letter = mcodestring(buffer);
-   //}
 
    int i; char lettter; char space[2] = " ";
 
@@ -138,7 +135,6 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
    //return 0 on success
    return 0;
 }
-
  
  //Add here code to release the LEDs after flashing is done
 static int dev_release(struct inode *inodep, struct file *filep) {
