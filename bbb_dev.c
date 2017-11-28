@@ -1,8 +1,16 @@
-//CHANGES TO IMPLEMENT
+//THINGS TO REVIEW
  /*
+ * 
  * file bbb_dev.c
  * LKM that retrieves a string from the user and flashes it in Morse code on the LEDs at the B^3 for Embedded OS at FIU
+ *
+ * can you include param in the header file
+ * make sure the naming convention of the device driver works (check when compiling on the B^3)
+ * does the comparison between space and char in line 105 work? YES
+ * anything needs to be done for the LED in dev_release
+ *
  */
+
  
 #include "bbb_dev.h"
 
@@ -66,6 +74,7 @@ static int __init bbb_dev_init(void) {
    return 0;
 }
  
+ //default open function
 static int dev_open(struct inode *inodep, struct file *filep){
 	//book code: struct dev
 
@@ -80,27 +89,17 @@ static int dev_open(struct inode *inodep, struct file *filep){
    return 0;
 }
  
- //re-implement this whole function so that it sends the info to the LEDs, not the user
-//static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
-//   printk(KERN_INFO "String from user received");
-   
-
-   //return -EFAULT;
-//}
-
-//static int dev_display() { return 0; }
-
 //read from the user and WRITE to the beaglebone at the same time
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
 
    sprintf(message, "%s(%zu letters)", buffer, len);   
    sizeMssg = strlen(message);  
 
-   //add code here to send the message to the B^3 to be displayed using the LEDs
-
+   //send the message to the B^3 to be displayed using the LEDs
    int i; char lettter; char space[2] = " ";
 
    for (i=0; i<sizeMssg; i++) {
+
       if(!(buffer[i] == space[0])) {
          //map the letter to the morse code character
          letter = mcodestring(buffer[i]);
@@ -112,7 +111,8 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
             case '-':
                BBBledOn();
                msleep(PERIOD * 3);
-            default:   //for errors
+            //in case of errors
+            default:  
                BBBledOff();
                msleep(PERIOD);
          }  
@@ -120,13 +120,13 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
          BBBledOff();
          msleep(PERIOD * 3);
       }
-      else { //inter word spacing code here
+      //inter-word spacing code here
+      else {
          BBBledOff();
          msleep(PERIOD * 7);
       }
           
    }
-
 
    //debugging for the write function             
    printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
@@ -171,6 +171,8 @@ static void __exit bbb_dev_exit(void) {
 module_init(bbb_dev_init);
 module_exit(bbb_dev_exit);
 
+
+//Code given by Pons
 void BBBremoveTrigger(){
    // remove the trigger from the LED
    int err = 0;
