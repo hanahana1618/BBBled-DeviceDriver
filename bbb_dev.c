@@ -11,6 +11,7 @@ static struct file_operations fops = {
    .owner = THIS_MODULE,
    .open = dev_open,
    .write = dev_write,
+   .display = dev_display,
    .release = dev_release
 };
  
@@ -69,6 +70,13 @@ static int dev_open(struct inode *inodep, struct file *filep){
 
    //return -EFAULT;
 //}
+
+static int dev_display() {
+
+
+   //return 0 on success
+   return 0;
+}
 
 //read from the user
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
