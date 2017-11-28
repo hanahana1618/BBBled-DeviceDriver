@@ -20,15 +20,20 @@ int main(void) { //just because CS50 was very annoying about this
 		printf("LKM successfully opened\n");
 	}
 
-	printf("Enter string to send to the device driver: ");
-	scanf("%[^\n]%*c", buff);
-	retWrite = write(fhandler, buff, strlen(buff));
-	if (retWrite < 0) {
-		printf("Unable to send string to device driver BBB_dev");
-		return -2;
-	}
+	while (1) {
+		printf("Enter quit to exit, or string to send to the device driver: ");
+		scanf("%[^\n]%*c", buff);
+		if (strcmp(buff, 'quit') == 0) {
+			exit(0);
+		}
+		retWrite = write(fhandler, buff, strlen(buff));
+		if (retWrite < 0) {
+			printf("Unable to send string to device driver BBB_dev");
+			return -2;
+		}
 
-	printf("Watch science happen now!");
+		printf("Watch science happen now!");
+	}
 
 	close(fhandler);
 
