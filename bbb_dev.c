@@ -92,11 +92,44 @@ static int dev_open(struct inode *inodep, struct file *filep){
 
 //read from the user and WRITE to the beaglebone at the same time
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
+   
    sprintf(message, "%s(%zu letters)", buffer, len);   
    sizeMssg = strlen(message);  
 
    //add code here to send the message to the B^3 to be displayed using the LEDs
-   
+   //while(buffer!='\0') {
+   //   char letter = mcodestring(buffer);
+   //}
+
+   int i; char lettter; char space[2] = " ";
+
+   for (i=0; i<sizeMssg; i++) {
+      if(!(buffer[i] == space[0])) {
+         //map the letter to the morse code character
+         letter = mcodestring(buffer[i]);
+
+         switch(letter) {
+            case '.':
+               BBBledOn();
+               msleep(PERIOD);
+            case '-':
+               BBBledOn();
+               msleep(PERIOD * 3);
+            default:   //for errors
+               BBBledOff();
+               msleep(PERIOD);
+         }  
+         //between letters
+         BBBledOff();
+         msleep(PERIOD * 3);
+      }
+      else { //inter word spacing code here
+         BBBledOff();
+         msleep(PERIOD * 7);
+      }
+          
+   }
+
 
    //debugging for the write function             
    printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
