@@ -23,7 +23,7 @@ int main(void) { //just because CS50 was very annoying about this
 	while (1) {
 		printf("Enter quit to exit, or string to send to the device driver: ");
 		scanf("%[^\n]%*c", buff);
-		if (strcmp(buff, 'quit') == 0) {
+		if (strcmp(buff, "quit") == 0) {
 			exit(0);
 		}
 		retWrite = write(fhandler, buff, strlen(buff));
