@@ -10,7 +10,6 @@ int main(void) { //just because CS50 was very annoying about this
 	char buff[BUFF_LEN];
 	
 	//accessing the LKM
-	//FILE *fhandler;
 	fhandler = open("/dev/bbb_dev", O_RDWR);
 
 	if (fhandler < 0) {
@@ -28,6 +27,10 @@ int main(void) { //just because CS50 was very annoying about this
 		printf("Unable to send string to device driver BBB_dev");
 		return -2;
 	}
+
+	printf("Watch science happen now!");
+
+	close(fhandler);
 
 	//program ran correctly
 	return 0;
