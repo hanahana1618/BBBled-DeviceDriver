@@ -8,6 +8,7 @@
  * make sure the naming convention of the device driver works (check when compiling on the B^3)
  * does the comparison between space and char in line 105 work? YES
  * anything needs to be done for the LED in dev_release
+ * sprintf on line 96, is it necessary
  *
  */
 
