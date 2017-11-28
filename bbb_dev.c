@@ -96,6 +96,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
    sizeMssg = strlen(message);  
 
    //add code here to send the message to the B^3 to be displayed using the LEDs
+   
 
    //debugging for the write function             
    printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
