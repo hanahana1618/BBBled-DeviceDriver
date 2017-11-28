@@ -34,7 +34,7 @@
 MODULE_LICENSE("GPL");            
 MODULE_AUTHOR("Ivette Prieto Castro");    
 MODULE_DESCRIPTION("Linux device driver for the B^3 in order to flash the LEDs in Morse Code");  
-MODULE_VERSION("0.1");  
+MODULE_VERSION("1.0");  
 
 //define listing for the LEDs to turn on
 #define GPIO1_START_ADDR 0x4804C000
@@ -65,7 +65,7 @@ static struct class*  BBBledClass  = NULL;
 static struct device* BBBledDevice = NULL; 
 static DEFINE_MUTEX(BBBledMutex);  //mutex unlocked by default
 
-//static variables declared for the LED mapping, notice they are static
+//static variables declared for the LED mapping, notice they are volatile
 static volatile void *gpio_addr;
 static volatile unsigned int *gpio_setdataout_addr;
 static volatile unsigned int *gpio_cleardataout_addr;
