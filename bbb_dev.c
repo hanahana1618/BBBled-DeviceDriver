@@ -106,7 +106,7 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
 
    for (i=0; i<sizeMssg; i++) {
 
-      if(strcmp(buffer[i], space) == 0) {
+      if(strcmp((const char *)buffer[i], space) == 0) {
       //if(!(buffer[i] == space[0])) {
          //map the letter to the morse code character
          letter = mcodestring(buffer[i]);
