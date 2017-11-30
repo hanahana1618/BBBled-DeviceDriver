@@ -4,10 +4,10 @@
  * file bbb_dev.c
  * LKM that retrieves a string from the user and flashes it in Morse code on the LEDs at the B^3 for Embedded OS at FIU
  *
- * can you include param in the header file
- * make sure the naming convention of the device driver works (check when compiling on the B^3)
+ * can you include param in the header file? NO
+ * 
  * does the comparison between space and char in line 105 work? YES
- * anything needs to be done for the LED in dev_release
+ * 
  * sprintf on line 96, is it necessary
  *
  */
@@ -71,11 +71,6 @@ static int __init bbb_dev_init(void) {
    gpio_cleardataout_addr = gpio_addr + GPIO_CLEARDATAOUT;
 
    BBBremoveTrigger(); //remove trigger when device driver init
-   //BBBledOn();
-   //msleep(1000);
-   //BBBledOff();
-   //msleep(1000);
-   //BBBledOn();
 
    return 0;
 }
@@ -98,38 +93,36 @@ static int device_open(struct inode *inodep, struct file *filep){
 //read from the user and WRITE to the beaglebone at the same time
 static ssize_t device_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
 
-   //sprintf(message, "%s(%zu letters)", buffer, len);
-   //sizeMssg = strlen(message);
-
    //send the message to the B^3 to be displayed using the LEDs
    int i; char *letter; char* space = " ";
 
+   printk(KERN_INFO "Size of the message is %d", sizeMssg);
+
    for (i=0; i<sizeMssg; i++) {
 
-     // if(strcmp((const char*) buffer[i], space) == 0) {
+      //if the character is a space then display the space morse code symbol, on the else statement
       if(!(buffer[i] == space[0])) {
-         //map the letter to the morse code character
-         letter = mcodestring(buffer[i]);
+        //map the letter to the morse code character
+        letter = mcodestring(buffer[i]);
 
-         while(letter[i] != '\0') {
-         switch(letter[i]) {
+        //letter[0] because the mcodestring return is always a 1 character string
+        switch(letter[0]) {
             case '.':
-               BBBledOn();
-               msleep(PERIOD);
+                BBBledOn();
+                msleep(PERIOD);
             case '-':
-               BBBledOn();
-               msleep(PERIOD * 3);
+                BBBledOn();
+                msleep(PERIOD * 3);
             //in case of errors
             default:
-               BBBledOff();
-               msleep(PERIOD);
+                BBBledOff();
+                msleep(PERIOD);
          }
          //between letters
-         BBBledOff();
-         msleep(PERIOD * 3);
-	 i++;
-	}
+        BBBledOff();
+        msleep(PERIOD * 3); 
       }
+
       //inter-word spacing code here
       else {
          BBBledOff();
@@ -140,6 +133,7 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
 
    //debugging for the write function
    printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
+   //DEBUG
 
 
    //return 0 on success
