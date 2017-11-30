@@ -1,4 +1,4 @@
-obj-m+=bbb-dd.o
+obj-m+=bbb_dev.o
 all:
 	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
 	$(CC) bbb_user.c bbb_user.h -o user_bbb
