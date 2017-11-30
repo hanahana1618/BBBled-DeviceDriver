@@ -10,7 +10,7 @@ int main(void) { //just because CS50 was very annoying about this
 	char buff[BUFF_LEN];
 	
 	//accessing the LKM
-	fhandler = open("/dev/bbb_dev", O_RDWR);
+	fhandler = open("/dev/BBB_dev", O_RDWR);
 
 	if (fhandler < 0) {
 		printf("Unable to open loadable kernel module BBB_dev. Closing program\n");
