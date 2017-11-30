@@ -1,6 +1,6 @@
 //THINGS TO REVIEW
  /*
- * 
+ *
  * file bbb_dev.c
  * LKM that retrieves a string from the user and flashes it in Morse code on the LEDs at the B^3 for Embedded OS at FIU
  *
@@ -12,9 +12,14 @@
  *
  */
 
- 
+
 #include "bbb_dev.h"
 
+//does this go in the header file
+module_param(name, charp, S_IRUGO);
+///< Param desc. charp = char ptr, S_IRUGO can be read/not changed
+
+MODULE_PARM_DESC(name, "The name to display in /var/log/kern.log");  ///< parameter descript
 
 static struct file_operations fops = {
    .owner = THIS_MODULE,
@@ -23,34 +28,34 @@ static struct file_operations fops = {
    //.display = dev_display,
    .release = dev_release
 };
- 
-static int __init bbb_dev_init(void) { 
+
+static int __init bbb_dev_init(void) {
 	//save major number
    major = register_chrdev(0, DEVICE_NAME, &fops);
    if (major<0){
       printk(KERN_ALERT "bbb_dev failed to register major number\n");
-      return major; 
+      return major;
    }
    printk(KERN_INFO "bbb_dev: registered a major number %d\n", major);
- 
+
    // Register the device class
    bbb_devClass = class_create(THIS_MODULE, CLASS_NAME);
-   if (IS_ERR(bbb_devClass)) {           
+   if (IS_ERR(bbb_devClass)) {
       unregister_chrdev(major, DEVICE_NAME);
       printk(KERN_ALERT "Failed to register device class. Exiting init\n");
-      return PTR_ERR(bbb_devClass);        
+      return PTR_ERR(bbb_devClass);
    }
    printk(KERN_INFO "bbb_dev: device class registered correctly\n");
- 
+
    // Register the device driver
    bbb_devDevice = device_create(bbb_devClass, NULL, MKDEV(major, 0), NULL, DEVICE_NAME);
    if (IS_ERR(bbb_devDevice)) {     //unregister if error
-      class_destroy(bbb_devClass);          
+      class_destroy(bbb_devClass);
       unregister_chrdev(major, DEVICE_NAME);
       printk(KERN_ALERT "Failed to create the device class\n");
       return PTR_ERR(bbb_devDevice);
    }
-   printk(KERN_INFO "bbb_dev: device class created correctly\n"); 
+   printk(KERN_INFO "bbb_dev: device class created correctly\n");
 
    //lock mutex when the device driver is init
    mutex_init(&bbb_devMutex);
@@ -74,7 +79,7 @@ static int __init bbb_dev_init(void) {
 
    return 0;
 }
- 
+
  //default open function
 static int dev_open(struct inode *inodep, struct file *filep){
 	//book code: struct dev
@@ -89,15 +94,15 @@ static int dev_open(struct inode *inodep, struct file *filep){
    printk(KERN_INFO "bbb_dev: Device has been successfully opened.\n");
    return 0;
 }
- 
+
 //read from the user and WRITE to the beaglebone at the same time
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
 
-   sprintf(message, "%s(%zu letters)", buffer, len);   
-   sizeMssg = strlen(message);  
+   sprintf(message, "%s(%zu letters)", buffer, len);
+   sizeMssg = strlen(message);
 
    //send the message to the B^3 to be displayed using the LEDs
-   int i; char lettter; char space[2] = " ";
+   int i; char letter; char space[2] = " ";
 
    for (i=0; i<sizeMssg; i++) {
 
@@ -113,10 +118,10 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
                BBBledOn();
                msleep(PERIOD * 3);
             //in case of errors
-            default:  
+            default:
                BBBledOff();
                msleep(PERIOD);
-         }  
+         }
          //between letters
          BBBledOff();
          msleep(PERIOD * 3);
@@ -126,17 +131,17 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
          BBBledOff();
          msleep(PERIOD * 7);
       }
-          
+
    }
 
-   //debugging for the write function             
+   //debugging for the write function
    printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
 
 
    //return 0 on success
    return 0;
 }
- 
+
  //Add here code to release the LEDs after flashing is done
 static int dev_release(struct inode *inodep, struct file *filep) {
 	//hardware to release code -- is there anything that needs to be done for the LED?
@@ -160,15 +165,15 @@ static void __exit bbb_dev_exit(void) {
    mutex_destroy(&bbb_devMutex);
 
    //make sure to sign out of the device driver
-   device_destroy(bbb_devClass, MKDEV(major, 0));    
-   class_unregister(bbb_devClass);                         
-   class_destroy(bbb_devClass);                    
-   unregister_chrdev(major, DEVICE_NAME);     
+   device_destroy(bbb_devClass, MKDEV(major, 0));
+   class_unregister(bbb_devClass);
+   class_destroy(bbb_devClass);
+   unregister_chrdev(major, DEVICE_NAME);
 
    //print out debug message on the kernel log
    printk(KERN_INFO "bbb_dev: Goodbye from the LKM!\n");
 }
- 
+
 module_init(bbb_dev_init);
 module_exit(bbb_dev_exit);
 
@@ -177,7 +182,7 @@ module_exit(bbb_dev_exit);
 void BBBremoveTrigger(){
    // remove the trigger from the LED
    int err = 0;
-  
+
   strcpy(fullFileName, LED0_PATH);
   strcat(fullFileName, "/");
   strcat(fullFileName, "trigger");
@@ -191,7 +196,7 @@ void BBBremoveTrigger(){
 void BBBstartHeartbeat(){
    // start heartbeat from the LED
      int err = 0;
-  
+
 
   strcpy(fullFileName, LED0_PATH);
   strcat(fullFileName, "/");
@@ -226,13 +231,13 @@ int setup_disk() {
 
    fs = get_fs();
    set_fs(KERNEL_DS);
-   
-   if (dio && reopen) { 
+
+   if (dio && reopen) {
       f = filp_open(filepath, O_WRONLY | O_CREAT | O_LARGEFILE | O_SYNC | O_DIRECT, 0444);
    } else if (dio) {
       f = filp_open(filepath, O_WRONLY | O_CREAT | O_LARGEFILE | O_TRUNC | O_SYNC | O_DIRECT, 0444);
    }
-   
+
    if(!dio || (f == ERR_PTR(-EINVAL))) {
       f = filp_open(filepath, O_WRONLY | O_CREAT | O_LARGEFILE | O_TRUNC, 0444);
       dio = 0;
@@ -265,12 +270,12 @@ ssize_t write_vaddr_disk(void * v, size_t is) {
 
    fs = get_fs();
    set_fs(KERNEL_DS);
-   
+
    pos = f->f_pos;
    s = vfs_write(f, v, is, &pos);
    if (s == is) {
       f->f_pos = pos;
-   }              
+   }
    set_fs(fs);
    if (s != is && dio) {
       disable_dio();
@@ -279,5 +284,3 @@ ssize_t write_vaddr_disk(void * v, size_t is) {
    }
    return s;
 }
-
-
