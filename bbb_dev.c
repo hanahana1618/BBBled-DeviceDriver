@@ -106,7 +106,8 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 
    for (i=0; i<sizeMssg; i++) {
 
-      if(!(buffer[i] == space[0])) {
+      if(strcmp(buffer[i], space[0]) == 0) {
+      //if(!(buffer[i] == space[0])) {
          //map the letter to the morse code character
          letter = mcodestring(buffer[i]);
 
