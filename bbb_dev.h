@@ -48,6 +48,8 @@ MODULE_VERSION("1.0");
 
 #define USR_LED USR0
 #define LED0_PATH "/sys/class/leds/beaglebone:green:usr0"
+//Period was originally 250, it seems to be too slow for this
+//Testing with 25 instead
 #define PERIOD 25
 
 
