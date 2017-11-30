@@ -23,10 +23,10 @@ MODULE_PARM_DESC(name, "The name to display in /var/log/kern.log");  ///< parame
 
 static struct file_operations fops = {
    .owner = THIS_MODULE,
-   .open = dev_open,
-   .write = dev_write,
+   .open = device_open,
+   .write = device_write,
    //.display = dev_display,
-   .release = dev_release
+   .release = device_release
 };
 
 static int __init bbb_dev_init(void) {
@@ -81,7 +81,7 @@ static int __init bbb_dev_init(void) {
 }
 
  //default open function
-static int dev_open(struct inode *inodep, struct file *filep){
+static int device_open(struct inode *inodep, struct file *filep){
 	//book code: struct dev
 
    if (!mutex_trylock(&bbb_devMutex)) {
@@ -96,7 +96,7 @@ static int dev_open(struct inode *inodep, struct file *filep){
 }
 
 //read from the user and WRITE to the beaglebone at the same time
-static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
+static ssize_t device_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
 
    sprintf(message, "%s(%zu letters)", buffer, len);
    sizeMssg = strlen(message);
@@ -144,7 +144,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 }
 
  //Add here code to release the LEDs after flashing is done
-static int dev_release(struct inode *inodep, struct file *filep) {
+static int device_release(struct inode *inodep, struct file *filep) {
 	//hardware to release code -- is there anything that needs to be done for the LED?
 
    //unlock the mutex so that another use can have it

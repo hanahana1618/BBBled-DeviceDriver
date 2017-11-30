@@ -73,10 +73,10 @@ static volatile unsigned int *gpio_cleardataout_addr;
 
 
 //file declarations for the device driver
-static int dev_open(struct inode *, struct file *);
+static int device_open(struct inode *, struct file *);
 //static ssize_t dev_read(struct file *, char *, size_t, loff_t *); //display to LEDs
-static ssize_t dev_write(struct file *, const char *, size_t, loff_t *);  //get strings from the user to be displayed in Morse Code
-static int dev_release(struct inode *, struct file *);
+static ssize_t device_write(struct file *, const char *, size_t, loff_t *);  //get strings from the user to be displayed in Morse Code
+static int device_release(struct inode *, struct file *);
 //return something to the LEDs in order to display Morse code
 //static int dev_display();
 
