@@ -98,20 +98,21 @@ static int device_open(struct inode *inodep, struct file *filep){
 //read from the user and WRITE to the beaglebone at the same time
 static ssize_t device_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
 
-   sprintf(message, "%s(%zu letters)", buffer, len);
-   sizeMssg = strlen(message);
+   //sprintf(message, "%s(%zu letters)", buffer, len);
+   //sizeMssg = strlen(message);
 
    //send the message to the B^3 to be displayed using the LEDs
-   int i; char letter; char *space[2] = " ";
+   int i; char *letter; char* space = " ";
 
    for (i=0; i<sizeMssg; i++) {
 
-      if(strcmp((const char *)buffer[i], space) == 0) {
-      //if(!(buffer[i] == space[0])) {
+     // if(strcmp((const char*) buffer[i], space) == 0) {
+      if(!(buffer[i] == space[0])) {
          //map the letter to the morse code character
          letter = mcodestring(buffer[i]);
 
-         switch(letter) {
+         while(letter[i] != '\0') {
+         switch(letter[i]) {
             case '.':
                BBBledOn();
                msleep(PERIOD);
@@ -126,6 +127,8 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
          //between letters
          BBBledOff();
          msleep(PERIOD * 3);
+	 i++;
+	}
       }
       //inter-word spacing code here
       else {

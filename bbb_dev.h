@@ -48,7 +48,7 @@ MODULE_VERSION("1.0");
 
 #define USR_LED USR0
 #define LED0_PATH "/sys/class/leds/beaglebone:green:usr0"
-#define PERIOD 250
+#define PERIOD 25
 
 
 
@@ -60,7 +60,7 @@ void BBBledOff(void);
 
 //variables for the device driver
 static int major = 0;
-static char message[256] = {0};
+//static char message[256] = {0};
 static short sizeMssg = 0;
 static struct class*  bbb_devClass  = NULL;
 static struct device* bbb_devDevice = NULL;

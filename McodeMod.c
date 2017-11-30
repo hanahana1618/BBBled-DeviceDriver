@@ -12,7 +12,7 @@ char *morse_code[40] = {"",
 
 
 //inline char * mcodestring(int asciicode)
-char * mcodestring(int asciicode) {
+extern char * mcodestring(int asciicode) {
    char *mc;   // this is the mapping from the ASCII code into the mcodearray of strings.
 
    if (asciicode > 122)  // Past 'z'
