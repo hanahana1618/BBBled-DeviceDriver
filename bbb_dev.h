@@ -13,9 +13,9 @@
 #include "McodeMod.h"
 
 //Blinking the LED includes
-#include <delay.h>
-#include <string.h>
-#include <types.h>
+#include <linux/delay.h>
+#include <linux/string.h>
+#include <linux/types.h>
 #include <linux/kdev_t.h>
 #include <linux/ioport.h>
 #include <linux/highmem.h>
