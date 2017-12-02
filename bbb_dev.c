@@ -100,10 +100,15 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
 
    for (i=0; i<sizeMssg; i++) {
 
+      printk(KERN_INFO "The length of the buffes is presently: %d\n", sizeMssg);
       //if the character is a space then display the space morse code symbol, on the else statement
       if(!(buffer[i] == space[0])) {
+        printk(KERN_INFO "Buffer[i] in the loop is %c\n", buffer[i]);
+
         //map the letter to the morse code character
         letter = mcodestring(buffer[i]);
+
+        printk(KERN_INFO "Letter after conversion is %c\n", letter[0]);
 
         //letter[0] because the mcodestring return is always a 1 character string
         switch(letter[0]) {
@@ -125,14 +130,14 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
 
       //inter-word spacing code here
       else {
-         BBBledOff();
-         msleep(PERIOD * 7);
+        BBBledOff();
+        msleep(PERIOD * 7);
       }
 
    }
 
    //debugging for the write function
-   printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
+   //printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
    //DEBUG
 
 
