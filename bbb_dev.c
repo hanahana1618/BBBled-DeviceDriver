@@ -96,7 +96,7 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
    //send the message to the B^3 to be displayed using the LEDs
    int i; char *letter; char* space = " ";
 
-   printk(KERN_INFO "Size of the message is %d", sizeMssg);
+   //printk(KERN_INFO "Size of the message is %d", sizeMssg);
 
    for (i=0; i<strlen(buffer); i++) {
 

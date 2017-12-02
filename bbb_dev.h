@@ -10,7 +10,7 @@
 #include <linux/fs.h>             // file system in Linux
 #include <asm/uaccess.h>
 #include <linux/mutex.h>
-#include "McodeMod.h"
+#include "morse.h"
 
 //Blinking the LED includes
 #include <linux/delay.h>
@@ -63,7 +63,7 @@ void BBBledOff(void);
 //variables for the device driver
 static int major = 0;
 //static char message[256] = {0};
-static short sizeMssg = 0;
+//static short sizeMssg = 0;
 static struct class*  bbb_devClass  = NULL;
 static struct device* bbb_devDevice = NULL;
 static DEFINE_MUTEX(bbb_devMutex);  //mutex unlocked by default
