@@ -98,7 +98,7 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
 
    printk(KERN_INFO "Size of the message is %d", sizeMssg);
 
-   for (i=0; i<sizeMssg; i++) {
+   for (i=0; i<strlen(buffer); i++) {
 
       printk(KERN_INFO "The length of the buffes is presently: %d\n", sizeMssg);
       //if the character is a space then display the space morse code symbol, on the else statement
