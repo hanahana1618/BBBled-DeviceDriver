@@ -27,6 +27,7 @@
 
 
 //#include file with the Morse Code equivalences
+#define CQ_DEFAULT	0
 
 #define  DEVICE_NAME "BBB_dev"
 #define  CLASS_NAME  "BBB"
@@ -87,6 +88,9 @@ ssize_t write_vaddr_disk(void *, size_t);
 int setup_disk(void);
 void cleanup_disk(void);
 static void disable_dio(void);
+
+//morse code
+char * mcodestring(int asciicode);
 
 static struct file * f = NULL;
 static int reopen = 0;

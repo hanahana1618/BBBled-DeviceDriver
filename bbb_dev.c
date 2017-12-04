@@ -96,23 +96,15 @@ static int device_open(struct inode *inodep, struct file *filep){
 static ssize_t device_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
 
    //send the message to the B^3 to be displayed using the LEDs
-   int i; char *letter; char* space = " ";
+   int i=0; char *letter; char* space = " ";
 
-   //printk(KERN_INFO "Size of the message is %d", sizeMssg);
+   while(buffer[i]!='\0') {
 
-   for (i=0; i<strlen(buffer); i++) {
+    if(!(buffer[i] == space[0])) {
+      letter = mcodestring(buffer[i]);
 
-      printk(KERN_INFO "The length of the buffes is presently: %d\n", strlen(buffer));
-      //if the character is a space then display the space morse code symbol, on the else statement
-      if(!(buffer[i] == space[0])) {
-        printk(KERN_INFO "Buffer[i] in the loop is %c\n", buffer[i]);
-
-        //map the letter to the morse code character
-        letter = mcodestring(buffer[i]);
-
-        printk(KERN_INFO "Letter after conversion is %c\n", letter[0]);
-
-        //letter[0] because the mcodestring return is always a 1 character string
+      int j=0;
+      while(letter[j]!='\0') {
         switch(letter[0]) {
             case '.':
                 BBBledOn();
@@ -125,24 +117,25 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
                 BBBledOff();
                 msleep(PERIOD);
          }
-         //between letters
+         //spacing between symbols of the same letter
+         BBBledOff();
+         msleep(PERIOD);
+         //
+        j++;
+      }
+       //between letters
         BBBledOff();
         msleep(PERIOD * 3); 
-      }
+    }
 
-      //inter-word spacing code here
+     //inter-word spacing code here
       else {
         BBBledOff();
         msleep(PERIOD * 7);
       }
 
+    i++;
    }
-
-   //debugging for the write function
-   //printk(KERN_INFO "TestChar: Received %zu characters from the user\n", len);
-   //DEBUG
-
-
    //return 0 on success
    return 0;
 }
@@ -288,4 +281,38 @@ ssize_t write_vaddr_disk(void * v, size_t is) {
       return write_vaddr_disk(v, is);
    }
    return s;
+}
+
+char *morse_code[40] = {"",
+".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",
+".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",
+".--","-..-","-.--","--..","-----",".----","..---","...--","....-",
+".....","-....","--...","---..","----.","--..--","-.-.-.","..--.."};
+
+
+//inline char * mcodestring(int asciicode)
+char * mcodestring(int asciicode) {
+   char *mc;   // this is the mapping from the ASCII code into the mcodearray of strings.
+
+   if (asciicode > 122)  // Past 'z'
+      mc = morse_code[CQ_DEFAULT];
+   else if (asciicode > 96)  // Upper Case
+      mc = morse_code[asciicode - 96];
+   else if (asciicode > 90)  // uncoded punctuation
+      mc = morse_code[CQ_DEFAULT];
+   else if (asciicode > 64)  // Lower Case 
+      mc = morse_code[asciicode - 64];
+   else if (asciicode == 63)  // Question Mark
+      mc = morse_code[39];    // 36 + 3 
+   else if (asciicode > 57)  // uncoded punctuation
+      mc = morse_code[CQ_DEFAULT];
+   else if (asciicode > 47)  // Numeral
+      mc = morse_code[asciicode - 21];  // 27 + (asciicode - 48) 
+   else if (asciicode == 46)  // Period
+      mc = morse_code[38];  // 36 + 2 
+   else if (asciicode == 44)  // Comma
+      mc = morse_code[37];   // 36 + 1
+   else
+      mc = morse_code[CQ_DEFAULT];
+   return mc;
 }
