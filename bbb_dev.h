@@ -10,7 +10,7 @@
 #include <linux/fs.h>             // file system in Linux
 #include <asm/uaccess.h>
 #include <linux/mutex.h>
-#include "morse.h"
+//#include "morse.h"
 
 //Blinking the LED includes
 #include <linux/delay.h>
