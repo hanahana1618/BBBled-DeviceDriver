@@ -1,6 +1,6 @@
 //Code given by Pons
 
-#include "McodeMod.h"
+#include "morse.h"
 /* the empty string, follwed by 26 letter codes, followed by the 10 numeral codes, followed by the comma,
    period, and question mark.  */
 
