@@ -8,7 +8,7 @@
  * 
  * does the comparison between space and char in line 105 work? YES
  * 
- * sprintf on line 96, is it necessary
+ * 
  *
  */
 
@@ -27,7 +27,6 @@ static struct file_operations fops = {
    .owner = THIS_MODULE,
    .open = device_open,
    .write = device_write,
-   //.display = dev_display,
    .release = device_release
 };
 
