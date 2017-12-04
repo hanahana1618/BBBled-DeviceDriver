@@ -1,7 +1,7 @@
 //McodeMod.h
 
-#ifndef MCODEMOD_H
-#define MCODEMOD_H
+#ifndef MORSE_H
+#define MORSE_H
 
 #define CQ_DEFAULT	0
 
