@@ -21,6 +21,8 @@ module_param(name, charp, S_IRUGO);
 
 MODULE_PARM_DESC(name, "The name to display in /var/log/kern.log");  ///< parameter descript
 
+
+
 static struct file_operations fops = {
    .owner = THIS_MODULE,
    .open = device_open,
@@ -100,7 +102,7 @@ static ssize_t device_write(struct file *filep, const char *buffer, size_t len, 
 
    for (i=0; i<strlen(buffer); i++) {
 
-      printk(KERN_INFO "The length of the buffes is presently: %d\n", sizeMssg);
+      printk(KERN_INFO "The length of the buffes is presently: %d\n", strlen(buffer));
       //if the character is a space then display the space morse code symbol, on the else statement
       if(!(buffer[i] == space[0])) {
         printk(KERN_INFO "Buffer[i] in the loop is %c\n", buffer[i]);
