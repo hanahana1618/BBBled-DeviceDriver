@@ -32,7 +32,7 @@ int main(void) { //just because CS50 was very annoying about this
 			return -2;
 		}
 
-		printf("Watch science happen now!");
+		printf("Watch science happen now!\n");
 	}
 
 	close(fhandler);
