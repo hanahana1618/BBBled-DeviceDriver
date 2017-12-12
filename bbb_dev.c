@@ -71,7 +71,7 @@ static int __init bbb_dev_init(void) {
    gpio_setdataout_addr   = gpio_addr + GPIO_SETDATAOUT;
    gpio_cleardataout_addr = gpio_addr + GPIO_CLEARDATAOUT;
 
-   BBBremoveTrigger(); //remove trigger when device driver init
+   //BBBremoveTrigger(); //remove trigger when device driver init
 
    return 0;
 }
